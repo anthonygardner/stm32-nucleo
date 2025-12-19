@@ -57,7 +57,7 @@ void can_init(void) {
     CAN1->FMR &= ~CAN_FMR_FINIT;
 }
 
-void can_receive(uint32_t *id, uint8_t *data, uint8_t *len) {
+int can_receive(uint32_t *id, uint8_t *data, uint8_t *len) {
     if (!(CAN1->RF0R & CAN_RF0R_FMP0)) {
         return 0;
     }

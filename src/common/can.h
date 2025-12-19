@@ -5,16 +5,8 @@
 
 void can_init(void);
 
-void can_receive(
-    uint32_t *id,
-    uint8_t *data,
-    uint8_t *len
-);
+int can_receive(uint32_t *id, uint8_t *data, uint8_t *len);
 
-void can_transmit(
-    uint32_t id,
-    uint8_t *data,
-    uint8_t len
-);
+void can_transmit(uint32_t id, uint8_t *data, uint8_t len);
 
 #endif
