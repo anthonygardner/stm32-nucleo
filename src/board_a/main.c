@@ -1,12 +1,14 @@
-#include "stm32f767xx.h"
-#include "clock.h"
-#include "gpio.h"
 #include "can.h"
+#include "clock.h"
+#include "eth.h"
+#include "gpio.h"
+#include "stm32f767xx.h"
 
 int main(void) {
     clock_init();
     led_init();
     can_init();
+    eth_init();
     
     uint8_t counter = 0;
     
