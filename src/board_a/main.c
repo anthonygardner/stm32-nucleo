@@ -2,6 +2,7 @@
 #include "clock.h"
 #include "eth.h"
 #include "gpio.h"
+#include "uart.h"
 #include "stm32f767xx.h"
 
 int main(void) {
