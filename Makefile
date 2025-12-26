@@ -7,7 +7,7 @@ CFLAGS += -Iinclude -Iinclude/cmsis -Isrc/common
 
 LDFLAGS = -Tstm32f767.ld -nostartfiles
 
-COMMON_SRC = src/common/can.c src/common/clock.c src/common/gpio.c src/common/startup.c
+COMMON_SRC = $(wildcard src/common/*.c)
 
 build/board_a/firmware.elf: src/board_a/main.c $(COMMON_SRC)
 	@mkdir -p build/board_a
