@@ -12,10 +12,17 @@ int main(void) {
     GPIOB->ODR |= (1 << 0);
 
     clock_init();
+    GPIOB->ODR ^= (1 << 0);
+
     led_init();
     uart_init();
+    GPIOB->ODR ^= (1 << 0);
+
     can_init();
+    GPIOB->ODR ^= (1 << 0);
+
     eth_init();
+    GPIOB->ODR ^= (1 << 0);
     
     uint8_t counter = 0;
     
