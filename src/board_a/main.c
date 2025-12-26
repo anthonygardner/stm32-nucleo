@@ -13,17 +13,21 @@ int main(void) {
     led_init();
     uart_init();
     can_init();
+    
+    uart_send_char('X');
+    uart_send_char('\r');
+    uart_send_char('\n');
+
     eth_init();
     
     uint8_t counter = 0;
     
     while (1) {
-        // uint8_t data[8] = {counter++, 0, 0, 0, 0, 0, 0, 0};
-        // can_transmit(0x100, data, 1);
+        uint8_t data[8] = {counter++, 0, 0, 0, 0, 0, 0, 0};
+        can_transmit(0x100, data, 1);
         
-        // led_toggle();
+        led_toggle();
 
-        GPIOB->ODR ^= (1 << 0);
         for (volatile int i = 0; i < 500000; i++);
     }
 }
