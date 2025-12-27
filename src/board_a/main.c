@@ -24,12 +24,8 @@ int main(void) {
         led_toggle();
 
         if (eth_get_link_status()) {
-            uart_send_char('U');
-            uart_send_char('P');
             GPIOB->ODR |= (1 << 7); // Blue LED on
         } else {
-            uart_send_char('D');
-            uart_send_char('N');
             GPIOB->ODR |= (1 << 14); // Red LED on
         }
         
