@@ -25,7 +25,9 @@ int main(void) {
 
         if (eth_get_link_status()) {
             GPIOB->ODR |= (1 << 7); // Blue LED on
+            GPIOB->ODR &= ~(1 << 14); // Red LED off
         } else {
+            GPIOB->ODR &= ~(1 << 7); // Blue LED off
             GPIOB->ODR |= (1 << 14); // Red LED on
         }
 
