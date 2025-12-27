@@ -6,24 +6,39 @@
 #include "stm32f767xx.h"
 
 int main(void) {
-    // Enable clocks
-    RCC->AHB1ENR |= RCC_AHB1ENR_GPIODEN;
-    RCC->APB1ENR |= RCC_APB1ENR_USART3EN;
+    RCC->AHB1ENR |= RCC_AHB1ENR_GPIOBEN;
+    GPIOB->MODER |= (1 << 14);
+
+    GPIOB->ODR |= (1 << 7); // on
+    GPIOB->ODR &= ~(1 << 7); // off
+    clock_init();
     
-    // Configure PD8 as AF7
-    GPIOD->MODER |= (0b10 << 16);
-    GPIOD->AFR[1] |= (7 << 0);
+    GPIOB->ODR |= (1 << 7); // on
+    GPIOB->ODR &= ~(1 << 7); // off
+    led_init();
+
+    uart_init();
+    GPIOB->ODR |= (1 << 7); // on
+    GPIOB->ODR &= ~(1 << 7); // off
+
+    can_init();
+    GPIOB->ODR |= (1 << 7); // on
+    GPIOB->ODR &= ~(1 << 7); // off
+
+    eth_init();
+    GPIOB->ODR |= (1 << 7); // on
+    GPIOB->ODR &= ~(1 << 7); // off
     
-    // Baud rate for 16 MHz, 115200 baud
-    USART3->BRR = 139;
+    uint8_t counter = 0;
     
-    // Enable TX and USART
-    USART3->CR1 |= (1 << 3) | (1 << 13);
-    
-    // Send forever
     while (1) {
-        while (!(USART3->ISR & (1 << 7)));
-        USART3->TDR = 'U';
-        for (volatile int i = 0; i < 100000; i++);
+        uint8_t data[8] = {counter++, 0, 0, 0, 0, 0, 0, 0};
+        can_transmit(0x100, data, 1);
+
+        GPIOB->ODR |= (1 << 7); // on
+        GPIOB->ODR &= ~(1 << 7); // off
+        
+        led_toggle();
+        for (volatile int i = 0; i < 500000; i++);
     }
 }
