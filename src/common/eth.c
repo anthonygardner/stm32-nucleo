@@ -145,7 +145,7 @@ static uint32_t eth_read_phy_id(void) {
     return (reg2 << 16) | reg3;
 }
 
-static uint16_t eth_get_link_status(void) {
+uint16_t eth_get_link_status(void) {
     // Read PHY register 1 (Basic Status Register)
     uint16_t bsr = eth_mdio_read(0, 1);
 
