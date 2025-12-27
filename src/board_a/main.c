@@ -14,10 +14,10 @@ int main(void) {
     led_init();
     uart_init();
 
-    while (1) {
-        uart_send_char('U');
-        for (volatile int i = 0; i < 100000; i++);
-    }
+    uart_send_char('H');
+    uart_send_char('i');
+    uart_send_char('\r');
+    uart_send_char('\n');
 
     can_init();
     eth_init();
