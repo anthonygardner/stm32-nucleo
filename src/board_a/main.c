@@ -10,7 +10,7 @@ int main(void) {
     GPIOB->MODER |= (1 << 14);
     GPIOB->ODR |= (1 << 7); // Blue LED on
 
-    clock_init();
+    // clock_init();
     led_init();
     uart_init();
 
