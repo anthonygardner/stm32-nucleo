@@ -39,7 +39,7 @@ int main(void) {
         uart_print_str("\r\n");
         uart_print_str("\r\n");
 
-        for (volatile int i = 0; i < 500000; i++);
+        for (volatile int i = 0; i < 2000000; i++);
     }
 }
 
