@@ -8,8 +8,16 @@ clients = set()
 
 async def broadcast(message):
     if clients:
-        await asyncio.gather(*[client.send(message) for client in clients])
+        dead = set()
         
+        for client in clients.copy():
+            try:
+                await client.send(message)
+            except:
+                dead.add(client)
+        
+        clients.difference_update(dead)
+            
 async def handler(websocket):
     clients.add(websocket)
     print("Client connected")
@@ -34,17 +42,20 @@ async def serial_reader():
             parts = line.split(',')
             
             if len(parts) == 7:
-                data = {
-                    'ax': float(parts[0]),
-                    'ay': float(parts[1]),
-                    'az': float(parts[2]),
-                    'temp': float(parts[3]),
-                    'gx': float(parts[4]),
-                    'gy': float(parts[5]),
-                    'gz': float(parts[6]),
-                }
-                
-                await broadcast(json.dumps(data))
+                try:
+                    data = {
+                        'ax': float(parts[0]),
+                        'ay': float(parts[1]),
+                        'az': float(parts[2]),
+                        'temp': float(parts[3]),
+                        'gx': float(parts[4]),
+                        'gy': float(parts[5]),
+                        'gz': float(parts[6]),
+                    }
+                    await broadcast(json.dumps(data))
+                    
+                except ValueError:
+                    pass
             
             await asyncio.sleep(0.01)
 
