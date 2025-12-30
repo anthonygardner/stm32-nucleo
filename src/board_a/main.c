@@ -12,17 +12,24 @@
 int main(void) {
     clock_init();
     uart_init();
+    i2c_init();
+    mpu6050_init();
     
-    int count = 0;
+    mpu6050_raw_t data;
     
     while (1) {
-        uart_print_str("COUNT:");
-        uart_print_int(count++);
-        uart_print_str("\r\n");
+        mpu6050_read_all(&data);
         
-        while (!(USART3->ISR & (1 << 6)));
+        uart_print_string("AX:");
+        uart_print_int(data.accel_x);
+        uart_print_string(" AY:");
+        uart_print_int(data.accel_y);
+        uart_print_string(" AZ:");
+        uart_print_int(data.accel_z);
+        uart_print_string("\r\n");
+        uart_print_string("\r\n");
         
-        for (volatile int i = 0; i < 5000000; i++);
+        for (volatile int i = 0; i < 2000000; i++);
     }
 }
 
