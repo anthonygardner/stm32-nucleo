@@ -30,6 +30,12 @@ void uart_print_hex(uint32_t val) {
     uart_send_char('\n');
 };
 
+void uart_print_hex8(uint8_t val) {
+    char hex[] = "0123456789ABCDEF";
+    uart_send_char(hex[(val >> 4) & 0xF]);
+    uart_send_char(hex[val & 0xF]);
+}
+
 char uart_get_char(void) {
     while (!(USART3->ISR & (1 << 5))); // Wait until RXNE is set
     return USART3->RDR;
