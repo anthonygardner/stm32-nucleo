@@ -9,31 +9,43 @@ LDFLAGS = -Tstm32f767.ld -nostartfiles
 
 COMMON_SRC = $(wildcard src/common/*.c)
 
-build/board_a/firmware.elf: src/board_a/main.c $(COMMON_SRC)
-	@mkdir -p build/board_a
+build/obc/firmware.elf: src/obc/main.c $(COMMON_SRC)
+	@mkdir -p build/obc
 	$(CC) $(CFLAGS) $(LDFLAGS) $^ -o $@
 
-build/board_a/firmware.bin: build/board_a/firmware.elf
+build/obc/firmware.bin: build/obc/firmware.elf
 	$(OBJCOPY) -O binary $< $@
 
-board_a: build/board_a/firmware.bin
+obc: build/obc/firmware.bin
 
-build/board_b/firmware.elf: src/board_b/main.c $(COMMON_SRC)
-	@mkdir -p build/board_b
+build/adcs/firmware.elf: src/adcs/main.c $(COMMON_SRC)
+	@mkdir -p build/adcs
 	$(CC) $(CFLAGS) $(LDFLAGS) $^ -o $@
 
-build/board_b/firmware.bin: build/board_b/firmware.elf
+build/adcs/firmware.bin: build/adcs/firmware.elf
 	$(OBJCOPY) -O binary $< $@
 
-board_b: build/board_b/firmware.bin
+adcs: build/adcs/firmware.bin
 
-flash_a: board_a
-	st-flash --serial 0666FF555567894967085233 write build/board_a/firmware.bin 0x8000000
+build/pms/firmware.elf: src/pms/main.c $(COMMON_SRC)
+	@mkdir -p build/pms
+	$(CC) $(CFLAGS) $(LDFLAGS) $^ -o $@
 
-flash_b: board_b
-	st-flash --serial 066CFF555567894967085254 write build/board_b/firmware.bin 0x8000000
+build/pms/firmware.bin: build/pms/firmware.elf
+	$(OBJCOPY) -O binary $< $@
+
+pms: build/pms/firmware.bin
+
+flash_obc: obc
+	st-flash --serial 0666FF555567894967085233 write build/obc/firmware.bin 0x8000000
+
+flash_adcs: adcs
+	st-flash --serial 066CFF555567894967085254 write build/adcs/firmware.bin 0x8000000
+
+flash_pms: pms
+	st-flash --serial 066EFF485682884967134955 write build/pms/firmware.bin 0x8000000
 
 clean:
 	rm -fr build/
 
-.PHONY: board_a board_b flash_a flash_b clean
+.PHONY: obc adcs flash_obc flash_adcs flash_pms clean
